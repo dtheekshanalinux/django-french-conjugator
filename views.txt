@@ -23,8 +23,6 @@ def new_search(request):
     #all content we want
     card_postings = []
     
-    #post_title_listings = post_title_detail()
-
     # body card detail 
     card_detail = soup.find_all('div',{'class':'word-wrap-title'})
     for card in card_detail:
@@ -36,11 +34,30 @@ def new_search(request):
     # post title
      
     # this function is for get that how many cards for specific title 
+    def post_title_detail():
+        div_list = []
+        all_div_datail = soup.find_all('div',{'class':'blue-box-wrap'})
+        for div in all_div_datail:
+            post_title_i = div.find('p').text
+            div_list.append((post_title_i))
+
+        div_second = []
+        for index in range(len(div_list)):
+            #print(index, my_list[index], end = "\n")
+            div_second.append(div_list[index])
+            if div_list[index] == 'Présent' and index != 0:
+                continue
+        div_second.pop()
+        return div_second
+
+    post_title_listings = post_title_detail()
+    print(post_title_listings)
 
 
     stuff_for_frontend = {
     'search':search,
     'card_postings':card_postings,
+    'post_title_listings':post_title_listings,
     }
     return render(request, 'index.html', stuff_for_frontend)
     
