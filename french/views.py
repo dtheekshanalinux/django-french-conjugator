@@ -33,6 +33,7 @@ def new_search(request):
     
     num_list =[]
     
+    # iterate posts inside card
     post_detail = soup.find_all('div',{'class':'blue-box-wrap'})
     for div in post_detail:
         post = div.find('p').text
@@ -46,9 +47,25 @@ def new_search(request):
         else: # otherwise
             arrays.append([num_list[i]])
     #print(arrays)
-    # post title
-    list1 = card_postings
-    list2 = arrays
+    #post content details
+
+    parent_list = soup.find_all('ul',{'class':'wrap-verbs-listing'})  
+    parent_final = []
+    len_parent = []
+    for lists in parent_list:
+        check_list = lists.find_all('li')
+        len_of_parent = len(check_list)
+        len_parent.append(len_of_parent)
+        for check in check_list:
+            parentitem = check.get_text()
+            parent_final.append(parentitem)
+    #this is used to chunk that list
+    data = parent_final 
+    sizes = len_parent
+    it = iter(data)
+    variable = ([[next(it) for _ in range(size)] for size in sizes])
+    print(variable)
+
     zipped_lists = zip(card_postings, arrays) 
     # this function is for get that how many cards for specific title 
 
