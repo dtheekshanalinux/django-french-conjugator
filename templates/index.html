@@ -7,21 +7,21 @@
             <div class="container">
               <h2 class="text-center">{{search|title}}</h2>
 
-              {% for card,posts,contents in zipped_lists %}
+              {% for key0,value0 in whole_stuff.items %}
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="text-center">{{ card }}</h4>
+                            <h4 class="text-center">{{ key0 }}</h4>
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                              {% for post in posts%} 
+                              {% for key1,value1 in value0.items %} 
                                 <div class="col">
                                 <div class="card">
                                     <div class="card-header text-center text-primary">
-                                      <h5>{{ post }}</h5>
+                                      <h5>{{ key1 }}</h5>
                                     </div>
                                     <ul class="list-group list-group-flush">
                                       <li class="list-group-item border-0">
-                                      {% for subj in contents %}
-                                        <i>{{subj.0}} {{subj.1}} {{subj.2}} {{subj.3}}</i> 
+                                        {% for key2 in value1 %}
+                                        <i>{{ key2 }} <br></i> 
                                         {% endfor %}
                                       </li>
                                     </ul>

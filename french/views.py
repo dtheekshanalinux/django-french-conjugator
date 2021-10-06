@@ -12,9 +12,9 @@ def home(request):
 def new_search(request):
     search = request.POST.get('search')
     models.search.objects.create(search=search)
-    print(quote_plus(search))
-    Final_url = BASE_CONJUGATOR_URL.format(quote_plus(search))
-    print(Final_url)
+    #print(quote_plus(search))
+    Final_url = BASE_CONJUGATOR_URL.format(str(quote_plus(search)))
+    #print(Final_url)
     response = requests.get(Final_url)
     data = response.text
     soup = BeautifulSoup(data, features='html.parser')
@@ -29,8 +29,10 @@ def new_search(request):
         card_title = card.find('h4').text
 
         card_postings.append((card_title))
-    print(card_postings)
+    #print(card_postings)
+    card_name = tuple(card_postings)
     
+
     num_list =[]
     
     # iterate posts inside card
@@ -46,9 +48,10 @@ def new_search(request):
             arrays[len(arrays)-1].append(num_list[i]) # Add it to the last sub-array
         else: # otherwise
             arrays.append([num_list[i]])
-    #print(arrays)
+    #convert array to a tuple
+    post_title = tuple([tuple(e) for e in arrays])
+    #print(post_title)
     #post content details
-
     parent_list = soup.find_all('ul',{'class':'wrap-verbs-listing'})  
     parent_final = []
     len_parent = []
@@ -63,17 +66,20 @@ def new_search(request):
     data = parent_final 
     sizes = len_parent
     it = iter(data)
-    variable = ([[next(it) for _ in range(size)] for size in sizes])
-    print(variable)
-
-    zipped_lists = zip(card_postings, arrays) 
+    post_content = ([[next(it) for _ in range(size)] for size in sizes])
+    #convert list to tuple
+    card_content = tuple([tuple(e) for e in post_content])
+    whole_stuff = {card_name: {post_title: card_content}}
+    print(whole_stuff)
+    #this thing is used to return nested array with dictionary
+    #dic_of_stuff = {tuple(card_postings): {post_title: card_content}}
     # this function is for get that how many cards for specific title 
-
+    #print(dic_of_stuff)
 
     stuff_for_frontend = {
     'search':search,
     'card_postings':card_postings,
-    'zipped_lists':zipped_lists,
+    'whole_stuff':whole_stuff,
     }
     return render(request, 'index.html', stuff_for_frontend)
     
